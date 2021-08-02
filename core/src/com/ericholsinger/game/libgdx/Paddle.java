@@ -1,6 +1,7 @@
 package com.ericholsinger.game.libgdx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,6 +14,7 @@ public class Paddle {
     int y;
     int w;
     int h;
+    Sound sound;
 
     public Paddle(int id, Color color, int x, int y, int w, int h) {
         this.id = id;
@@ -23,6 +25,8 @@ public class Paddle {
 
         this.w = w;
         this.h = h;
+
+        sound = Gdx.audio.newSound(Gdx.files.internal("data/paddle.wav"));
     }
 
     public void update() {
@@ -32,5 +36,9 @@ public class Paddle {
     public void draw(ShapeRenderer shape) {
         shape.setColor(color);
         shape.rect(x, y, w, h);
+    }
+
+    public void playSound() {
+        sound.play();
     }
 }

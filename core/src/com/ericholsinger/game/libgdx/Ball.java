@@ -1,6 +1,7 @@
 package com.ericholsinger.game.libgdx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +15,7 @@ public class Ball {
     int r;
     int xSpeed;
     int ySpeed;
+    Sound bounceSound;
 
     public Ball(int id, Color color, int x, int y, int r, int xSpeed, int ySpeed) {
         this.id = id;
@@ -25,17 +27,26 @@ public class Ball {
 
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
+
+        bounceSound = Gdx.audio.newSound(Gdx.files.internal("data/wall.wav"));
     }
 
     public void update() {
         x += xSpeed;
         y += ySpeed;
 
+        boolean bounce = false;
         if (x > (Gdx.graphics.getWidth() - r) || x < r) {
             xSpeed = -xSpeed;
+            bounce = true;
         }
         if (y > (Gdx.graphics.getHeight() - r) || y < r) {
             ySpeed = -ySpeed;
+            bounce = true;
+        }
+
+        if (bounce) {
+            bounceSound.play();
         }
 
         if (x < r) {
@@ -61,6 +72,7 @@ public class Ball {
         if (collidesWith(paddle)){
             ySpeed = -ySpeed;
             color = Color.WHITE;
+            paddle.playSound();
         } else {
             color = Color.LIME;
         }

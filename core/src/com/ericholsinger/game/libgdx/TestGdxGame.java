@@ -2,6 +2,7 @@ package com.ericholsinger.game.libgdx;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -36,6 +37,8 @@ public class TestGdxGame extends ApplicationAdapter {
 					Color.GREEN,
 					Color.BLUE));
 
+	private ArrayList<Sound> sounds;
+
 	private Random r = new Random();
 
 	private SpriteBatch batch;
@@ -56,6 +59,8 @@ public class TestGdxGame extends ApplicationAdapter {
 		ball = createBall();
 		paddle = createPaddle();
 		blocks = createBlocks();
+
+		sounds = createSounds();
 	}
 
 	private ArrayList<Block> createBlocks() {
@@ -67,7 +72,7 @@ public class TestGdxGame extends ApplicationAdapter {
 		for (int row = 0; row < BLOCK_ROWS; ++row) {
 			for (int col = 0; col < BLOCK_COLS; ++col) {
 				color = ROW_COLORS.get(row);
-				blocks.add(new Block(10 * BLOCK_ROWS - (row * 10), color, BLOCK_SPACE + (col * BLOCK_WIDTH + col * BLOCK_SPACE), top - (row * BLOCK_HEIGHT + row * BLOCK_SPACE), BLOCK_WIDTH, BLOCK_HEIGHT));
+				blocks.add(new Block(row, color, BLOCK_SPACE + (col * BLOCK_WIDTH + col * BLOCK_SPACE), top - (row * BLOCK_HEIGHT + row * BLOCK_SPACE), BLOCK_WIDTH, BLOCK_HEIGHT));
 			}
 		}
 		return blocks;
@@ -75,6 +80,16 @@ public class TestGdxGame extends ApplicationAdapter {
 
 	private Paddle createPaddle() {
 		return new Paddle(0, Color.LIME, Gdx.graphics.getWidth() / 2, 50, PADDLE_WIDEST, PADDLE_HEIGHT);
+	}
+
+	private ArrayList<Sound> createSounds() {
+		ArrayList<Sound> sounds = new ArrayList<>();
+
+		for (int i = 0; i < BLOCK_ROWS; ++i) {
+			Sound wavSound = Gdx.audio.newSound(Gdx.files.internal(String.format("data/block%d.wav", i)));
+			sounds.add(wavSound);
+		}
+		return sounds;
 	}
 
 	private Ball createBall() {
@@ -100,7 +115,8 @@ public class TestGdxGame extends ApplicationAdapter {
 			if (!block.destroyed) {
 				ball.checkCollision(block);
 				if (block.destroyed) {
-					score += block.value;
+					score += 10 * BLOCK_ROWS - (block.row * 10);
+					sounds.get(block.row).play();
 				}
 				block.draw(shape);
 			}

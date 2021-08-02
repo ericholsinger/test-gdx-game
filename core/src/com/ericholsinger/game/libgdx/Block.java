@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Block {
-    int value;
+    int row;
     Color color;
     int x;
     int y;
@@ -12,8 +12,8 @@ public class Block {
     int h;
     boolean destroyed = false;
 
-    public Block(int id, Color color, int x, int y, int w, int h) {
-        this.value = id;
+    public Block(int row, Color color, int x, int y, int w, int h) {
+        this.row = row;
         this.color = color;
         this.x = x;
         this.y = y;
