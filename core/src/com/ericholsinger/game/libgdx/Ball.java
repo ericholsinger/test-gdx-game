@@ -2,6 +2,8 @@ package com.ericholsinger.game.libgdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Ball {
@@ -50,8 +52,26 @@ public class Ball {
         }
     }
 
-    public void draw(ShapeRenderer shape) {
+    public void draw(ShapeRenderer shape, SpriteBatch batch, BitmapFont font) {
         shape.setColor(color);
         shape.circle(x, y, r);
+    }
+
+    public void checkCollision(Paddle paddle) {
+        if (collidesWith(paddle)){
+            ySpeed = -ySpeed;
+            color = Color.WHITE;
+        } else {
+            color = Color.LIME;
+        }
+    }
+
+    private boolean collidesWith(Paddle paddle) {
+        if(paddle.x < x + r && paddle.x + paddle.w > x - r ) {
+            if (y + r > paddle.y && y - r < paddle.y + paddle.h) {
+                return true;
+            }
+        }
+        return false;
     }
 }
