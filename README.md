@@ -5,6 +5,7 @@ lib gdx game based on [HelloLibgdx](https://colourtann.github.io/HelloLibgdx/)
 ## Tags:
 0.0.4
 * bfxr sounds https://www.bfxr.net/
+![alt text](screenshot-0.0.4.png)
 
 0.0.3
 * Part 3 with colorful blocks and score
