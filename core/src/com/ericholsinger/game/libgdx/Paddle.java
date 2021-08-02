@@ -27,10 +27,9 @@ public class Paddle {
 
     public void update() {
         x = Gdx.input.getX();
-        //y = Gdx.graphics.getHeight() - Gdx.input.getY();
     }
 
-    public void draw(ShapeRenderer shape, Batch batch, BitmapFont font) {
+    public void draw(ShapeRenderer shape) {
         shape.setColor(color);
         shape.rect(x, y, w, h);
     }

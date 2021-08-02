@@ -52,7 +52,7 @@ public class Ball {
         }
     }
 
-    public void draw(ShapeRenderer shape, SpriteBatch batch, BitmapFont font) {
+    public void draw(ShapeRenderer shape) {
         shape.setColor(color);
         shape.circle(x, y, r);
     }
@@ -69,6 +69,23 @@ public class Ball {
     private boolean collidesWith(Paddle paddle) {
         if(paddle.x < x + r && paddle.x + paddle.w > x - r ) {
             if (y + r > paddle.y && y - r < paddle.y + paddle.h) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void checkCollision(Block block) {
+        if(collidesWith(block)){
+            ySpeed = -ySpeed;
+            color = Color.WHITE;
+            block.destroyed = true;
+        }
+    }
+
+    private boolean collidesWith(Block block) {
+        if(block.x < x + r && block.x + block.w > x - r ) {
+            if (y + r > block.y && y - r < block.y + block.h) {
                 return true;
             }
         }

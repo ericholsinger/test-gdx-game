@@ -3,6 +3,9 @@ lib gdx game based on [HelloLibgdx](https://colourtann.github.io/HelloLibgdx/)
 
 ---
 ## Tags:
+0.0.3
+* Part 3 with colorful blocks and score
+
 0.0.2
 * Part 2 with working paddle collisions
 
