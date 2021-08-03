@@ -48,6 +48,7 @@ public class TestGdxGame extends ApplicationAdapter {
 	private Ball ball;
 	private Paddle paddle;
 	private ArrayList<Block> blocks;
+	private Lives lives = new Lives(3);
 
 	@Override
 	public void create () {
@@ -98,8 +99,8 @@ public class TestGdxGame extends ApplicationAdapter {
 		radius = BALL_RADIUS;
 		x = 200;
 		y = Gdx.graphics.getHeight() - 200;
-		xSpeed = BALL_SPEED * (x > (Gdx.graphics.getWidth() / 2) ? -1 : 1);
-		ySpeed = BALL_SPEED * (y > (Gdx.graphics.getHeight() / 2) ? -1 : 1);
+		xSpeed = BALL_SPEED;
+		ySpeed = -BALL_SPEED;
 		return new Ball(0, Color.LIME, x, y, radius, xSpeed, ySpeed);
 	}
 
@@ -111,9 +112,21 @@ public class TestGdxGame extends ApplicationAdapter {
 		if (!ball.destroyed) {
 			ball.update();
 			ball.draw(shape);
-
-			ball.checkCollision(paddle);
+			if (ball.destroyed) {
+				lives.setTotal(lives.getTotal() - 1);
+			}
+		} else {
+			if (lives.getTotal() > 0) {
+				ball.x = 200;
+				ball.y = Gdx.graphics.getHeight() - 200;
+				ball.xSpeed = BALL_SPEED;
+				ball.ySpeed = -BALL_SPEED;
+				ball.destroyed = false;
+			}
 		}
+
+		ball.checkCollision(paddle);
+		lives.draw(shape);
 
 		for (Block block : blocks) {
 			if (!block.destroyed) {

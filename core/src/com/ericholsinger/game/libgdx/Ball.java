@@ -3,8 +3,6 @@ package com.ericholsinger.game.libgdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Ball {
@@ -32,6 +30,10 @@ public class Ball {
 
         bounceSound = Gdx.audio.newSound(Gdx.files.internal("data/wall.wav"));
         offscreenSound = Gdx.audio.newSound(Gdx.files.internal("data/offscreen.wav"));
+    }
+
+    public void reset() {
+        destroyed = false;
     }
 
     public void update() {
