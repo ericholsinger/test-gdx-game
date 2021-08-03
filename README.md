@@ -5,7 +5,8 @@ lib gdx game based on [HelloLibgdx](https://colourtann.github.io/HelloLibgdx/)
 ## Tags:
 
 0.0.5
-* looping [wolframe](http://tones.wolfram.com/generate) background track 
+* looping [wolfram](http://tones.wolfram.com/generate) background track
+* 3 lives
 
 0.0.4
 * [bfxr](https://www.bfxr.net/) sounds 
