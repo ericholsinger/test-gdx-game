@@ -3,8 +3,6 @@ package com.ericholsinger.game.libgdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Ball {
@@ -16,6 +14,8 @@ public class Ball {
     int xSpeed;
     int ySpeed;
     Sound bounceSound;
+    Sound offscreenSound;
+    boolean destroyed = false;
 
     public Ball(int id, Color color, int x, int y, int r, int xSpeed, int ySpeed) {
         this.id = id;
@@ -29,6 +29,11 @@ public class Ball {
         this.ySpeed = ySpeed;
 
         bounceSound = Gdx.audio.newSound(Gdx.files.internal("data/wall.wav"));
+        offscreenSound = Gdx.audio.newSound(Gdx.files.internal("data/offscreen.wav"));
+    }
+
+    public void reset() {
+        destroyed = false;
     }
 
     public void update() {
@@ -40,11 +45,10 @@ public class Ball {
             xSpeed = -xSpeed;
             bounce = true;
         }
-        if (y > (Gdx.graphics.getHeight() - r) || y < r) {
+        if (y >= (Gdx.graphics.getHeight() - r)) {
             ySpeed = -ySpeed;
             bounce = true;
         }
-
         if (bounce) {
             bounceSound.play();
         }
@@ -58,8 +62,12 @@ public class Ball {
         if (x > Gdx.graphics.getWidth() - r) {
             x = Gdx.graphics.getWidth() - r;
         }
-        if (y > Gdx.graphics.getHeight() - r) {
-            y = Gdx.graphics.getHeight() - r;
+        // bottom border
+        if (y <= r) {
+            destroyed = true;
+            offscreenSound.play();
+            xSpeed = 0;
+            ySpeed = 0;
         }
     }
 

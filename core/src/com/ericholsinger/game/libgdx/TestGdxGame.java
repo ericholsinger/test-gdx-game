@@ -37,7 +37,7 @@ public class TestGdxGame extends ApplicationAdapter {
 					Color.GREEN,
 					Color.BLUE));
 
-	private ArrayList<Sound> sounds;
+	private ArrayList<Sound> blockSounds;
 
 	private Random r = new Random();
 
@@ -48,6 +48,7 @@ public class TestGdxGame extends ApplicationAdapter {
 	private Ball ball;
 	private Paddle paddle;
 	private ArrayList<Block> blocks;
+	private Lives lives = new Lives(3);
 
 	@Override
 	public void create () {
@@ -56,11 +57,10 @@ public class TestGdxGame extends ApplicationAdapter {
 		font = new BitmapFont();
 		font.setColor(Color.LIGHT_GRAY);
 
+		blockSounds = createSounds();
 		ball = createBall();
 		paddle = createPaddle();
 		blocks = createBlocks();
-
-		sounds = createSounds();
 
 		Gdx.audio.newSound(Gdx.files.internal(String.format("data/background.wav"))).loop(.25f);
 	}
@@ -74,7 +74,7 @@ public class TestGdxGame extends ApplicationAdapter {
 		for (int row = 0; row < BLOCK_ROWS; ++row) {
 			for (int col = 0; col < BLOCK_COLS; ++col) {
 				color = ROW_COLORS.get(row);
-				blocks.add(new Block(row, color, BLOCK_SPACE + (col * BLOCK_WIDTH + col * BLOCK_SPACE), top - (row * BLOCK_HEIGHT + row * BLOCK_SPACE), BLOCK_WIDTH, BLOCK_HEIGHT));
+				blocks.add(new Block(row, color, BLOCK_SPACE + (col * BLOCK_WIDTH + col * BLOCK_SPACE), top - (row * BLOCK_HEIGHT + row * BLOCK_SPACE), BLOCK_WIDTH, BLOCK_HEIGHT, blockSounds.get(row)));
 			}
 		}
 		return blocks;
@@ -99,8 +99,8 @@ public class TestGdxGame extends ApplicationAdapter {
 		radius = BALL_RADIUS;
 		x = 200;
 		y = Gdx.graphics.getHeight() - 200;
-		xSpeed = BALL_SPEED * (x > (Gdx.graphics.getWidth() / 2) ? -1 : 1);
-		ySpeed = BALL_SPEED * (y > (Gdx.graphics.getHeight() / 2) ? -1 : 1);
+		xSpeed = BALL_SPEED;
+		ySpeed = -BALL_SPEED;
 		return new Ball(0, Color.LIME, x, y, radius, xSpeed, ySpeed);
 	}
 
@@ -108,16 +108,32 @@ public class TestGdxGame extends ApplicationAdapter {
 	public void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		shape.begin(ShapeRenderer.ShapeType.Filled);
-		ball.update();
-		ball.draw(shape);
+
+		if (!ball.destroyed) {
+			ball.update();
+			ball.draw(shape);
+			if (ball.destroyed) {
+				lives.setTotal(lives.getTotal() - 1);
+			}
+		} else {
+			if (lives.getTotal() > 0) {
+				ball.x = 200;
+				ball.y = Gdx.graphics.getHeight() - 200;
+				ball.xSpeed = BALL_SPEED;
+				ball.ySpeed = -BALL_SPEED;
+				ball.destroyed = false;
+			}
+		}
 
 		ball.checkCollision(paddle);
-		for (Block block: blocks) {
+		lives.draw(shape);
+
+		for (Block block : blocks) {
 			if (!block.destroyed) {
 				ball.checkCollision(block);
 				if (block.destroyed) {
 					score += 10 * BLOCK_ROWS - (block.row * 10);
-					sounds.get(block.row).play();
+					blockSounds.get(block.row).play();
 				}
 				block.draw(shape);
 			}
