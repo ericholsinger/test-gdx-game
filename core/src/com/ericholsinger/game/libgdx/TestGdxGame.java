@@ -61,6 +61,8 @@ public class TestGdxGame extends ApplicationAdapter {
 		blocks = createBlocks();
 
 		sounds = createSounds();
+
+		Gdx.audio.newSound(Gdx.files.internal(String.format("data/background.wav"))).loop(.25f);
 	}
 
 	private ArrayList<Block> createBlocks() {
@@ -86,8 +88,7 @@ public class TestGdxGame extends ApplicationAdapter {
 		ArrayList<Sound> sounds = new ArrayList<>();
 
 		for (int i = 0; i < BLOCK_ROWS; ++i) {
-			Sound wavSound = Gdx.audio.newSound(Gdx.files.internal(String.format("data/block%d.wav", i)));
-			sounds.add(wavSound);
+			sounds.add(Gdx.audio.newSound(Gdx.files.internal(String.format("data/block%d.wav", i))));
 		}
 		return sounds;
 	}
